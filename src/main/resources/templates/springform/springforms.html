@@ -225,7 +225,7 @@
                         <div class="card mb-0">
                             <div class="card-body">
                                 <div class="row gx-5 bg-white">
-                                    <form action="springitem.html" th:action th:object="${item}" method="post">
+                                    <form action="springitem.html" th:action th:object="${item}" method="post" enctype="multipart/form-data">
 
                                         <div th:if="${#fields.hasGlobalErrors()}">
                                             <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
@@ -233,28 +233,19 @@
 
                                         <div>
                                             <label for="itemName" th:text="#{label.item.itemName}">상품명</label>
-                                            <input type="text" id="itemName" th:field="*{itemName}"
-                                                   th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
-                                            <div class="field-error" th:errors="*{itemName}">
-                                                상품명 오류
-                                            </div>
+                                            <input type="text" id="itemName" name="itemName" th:field="*{itemName}" th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+                                            <div class="field-error" th:errors="*{itemName}">상품명 오류</div>
                                         </div>
                                         <div>
                                             <label for="price" th:text="#{label.item.price}">가격</label>
-                                            <input type="text" id="price" th:field="*{price}"
-                                                   th:errorclass="field-error" class="form-control" placeholder="가격을 입력하세요">
-                                            <div class="field-error" th:errors="*{price}">
-                                                가격 오류
-                                            </div>
+                                            <input type="text" id="price" name="price"  th:field="*{price}" th:errorclass="field-error" class="form-control" placeholder="가격을 입력하세요">
+                                            <div class="field-error" th:errors="*{price}">가격 오류</div>
                                         </div>
 
                                         <div>
                                             <label for="quantity" th:text="#{label.item.quantity}">수량</label>
-                                            <input type="text" id="quantity" th:field="*{quantity}"
-                                                   th:errorclass="field-error" class="form-control" placeholder="수량을 입력하세요">
-                                            <div class="field-error" th:errors="*{quantity}">
-                                                수량 오류
-                                            </div>
+                                            <input type="text" id="quantity" name="quantity"  th:field="*{quantity}" th:errorclass="field-error" class="form-control" placeholder="수량을 입력하세요">
+                                            <div class="field-error" th:errors="*{quantity}">수량 오류</div>
                                         </div>
 
 
@@ -274,12 +265,17 @@
                                                 <option th:each="selCode : ${selCodes}" th:value="${selCode.code}"
                                                         th:text="${selCode.displayName}">분야보기</option>
                                             </select>
+                                        </div>
 
+                                        <div>
+                                            <ul>
+                                                <li>이미지 파일들<input type="file" multiple="multiple" name="imageFiles" ></li>
+                                            </ul>
                                         </div>
-                                        <div class="input-group">
-                                            <label th:text="#{label.item.image}">이미지</label>
-                                            <input class="form-control" type="file" name="attachFile" th:field="${item.attachFile}" >
-                                        </div>
+
+
+
+
                                         <hr class="my-4">
 
                                         <div class="row">

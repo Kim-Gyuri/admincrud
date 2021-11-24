@@ -256,11 +256,10 @@
                     </select>
                   </div>
 
-                <!-- image -->
-                <div class="input-group">
-                  <label th:text="#{label.item.image}" th:value="item.attachFile}" >이미지</label>
-                  <input class="form-control" type="file" name="attachFile" disabled>
-                </div>
+                  <div>
+                      <img th:each="imageFile : ${item.imageFiles}" th:src="|/images/${imageFile.getStoreFileName()}|" width="300" height="300"/>
+                  </div>
+
 
                   <hr class="my-4">
                   <div class="row">

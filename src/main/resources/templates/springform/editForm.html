@@ -284,6 +284,11 @@
                                                         th:text="${selCode.displayName}">분야보기</option>
                                             </select>
                                         </div>
+
+                                        <div>
+                                            <div th:text="#{label.item.image}">상품 이미지</div>
+                                            <input th:field="${item.imageFiles}"type="file" multiple="multiple" name="imageFiles">
+                                        </div>
                                         <hr class="my-4">
 
                                         <div class="row">

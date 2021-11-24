@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Data
 public class ItemSaveForm {
@@ -26,6 +27,6 @@ public class ItemSaveForm {
     private ItemType itemType;  //상품 상태
     private String selCode; // 분야 분류
 
-    private MultipartFile attachFile;
+    private List<MultipartFile> imageFiles;
 
 }

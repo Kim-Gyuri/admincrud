@@ -19,7 +19,6 @@ public class Item {
     private ItemType itemType;  //상품 상태
     private String selCode; // 분야 분류
 
-    private UploadFile attachFile;
     private List<UploadFile> imageFiles;
 
     public Item() {
@@ -31,4 +30,5 @@ public class Item {
         this.quantity = quantity;
 
     }
+
 }

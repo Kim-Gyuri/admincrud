@@ -1,12 +1,11 @@
 package hello.admincrud;
 
+import hello.admincrud.domain.FileStore;
 import hello.admincrud.domain.Item.Item;
 import hello.admincrud.domain.Item.ItemRepository;
 import hello.admincrud.domain.Item.UploadFile;
 import hello.admincrud.domain.ItemType;
 import hello.admincrud.domain.SelCode;
-import hello.admincrud.file.FileStore;
-import hello.admincrud.validation.form.ItemForm;
 import hello.admincrud.validation.form.ItemSaveForm;
 import hello.admincrud.validation.form.ItemUpdateForm;
 import lombok.RequiredArgsConstructor;
@@ -56,20 +55,13 @@ public class SpringController {
     }
 
     @GetMapping("/add")  // form
-    public String addForm(Model model, @ModelAttribute ItemForm form) {
+    public String addForm(Model model) {
         model.addAttribute("item", new Item());
         return "springform/springforms";
     }
 
-    @GetMapping("/{itemId}")  //상세 페이지 : home에서 상품클릭
-    public String item(@PathVariable long itemId, Model model) {
-        Item item = itemRepository.findById(itemId);
-        model.addAttribute("item", item);
-        return "springform/springitem";
-    }
-
     @PostMapping("/add") //form 상품 등록시 리다이렉션
-    public String addItem(@Validated @ModelAttribute("item") ItemSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
+    public String addItem(@Validated @ModelAttribute ItemSaveForm form, BindingResult bindingResult, RedirectAttributes redirectAttributes) throws IOException {
 
         //특정 필드가 아닌 복합 룰 검증
         if (form.getPrice() != null && form.getQuantity() != null) {
@@ -85,38 +77,41 @@ public class SpringController {
             return "springform/springforms";
         }
 
-        //이미지
-        UploadFile attachFile = fileStore.storeFile(form.getAttachFile());
+        List<UploadFile> storeImageFiles = fileStore.storeFiles(form.getImageFiles());
 
         //성공로직
         Item item = new Item();
         item.setItemName(form.getItemName());
         item.setPrice(form.getPrice());
+        item.setItemType(form.getItemType());
         item.setQuantity(form.getQuantity());
-        item.setAttachFile(attachFile);
+        item.setSelCode(form.getSelCode());
+        item.setImageFiles(storeImageFiles);
+
 
         log.info("item.itemType={}", item.getItemType());
         log.info("item.secondType={}", item.getSelCode());
 
-        Item savedItem = itemRepository.save(item);
-        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        itemRepository.save(item);
+        redirectAttributes.addAttribute("itemId", item.getId());
         redirectAttributes.addAttribute("status", true);
         return "redirect:/spring/{itemId}";
     }
 
-    @GetMapping("/items/{id}")
-    public String items(@PathVariable Long id, Model model) {
+
+    @GetMapping("/{id}")  //상세 페이지 : home에서 상품클릭
+    public String item(@PathVariable Long id, Model model) {
         Item item = itemRepository.findById(id);
         model.addAttribute("item", item);
-        return "";
+        return "springform/springitem";
     }
 
+    //이미지 업로드
     @ResponseBody
     @GetMapping("/images/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
-
 
     @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId, Model model) {

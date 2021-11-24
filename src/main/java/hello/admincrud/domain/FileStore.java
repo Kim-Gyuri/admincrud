@@ -1,9 +1,10 @@
-package hello.admincrud.file;
+package hello.admincrud.domain;
 
 import hello.admincrud.domain.Item.UploadFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -12,15 +13,15 @@ import java.util.UUID;
 
 @Component
 public class FileStore {
-    @Value("${file.dir}")
-    private String fileDir;
+
+    @Value("${file.path}")
+    private String filePath;
 
     public String getFullPath(String filename) {
-        return fileDir + filename;
+        return filePath + filename;
     }
 
-    public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles)
-            throws IOException {
+    public List<UploadFile> storeFiles(List<MultipartFile> multipartFiles) throws IOException {
         List<UploadFile> storeFileResult = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFiles.isEmpty()) {
